@@ -1,0 +1,27 @@
+{
+	"name": "IncrementalWatermarksDS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDatabaseLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "TableName",
+				"type": "varchar"
+			},
+			{
+				"name": "LastInsertedId",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "IncrementalWatermarks"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

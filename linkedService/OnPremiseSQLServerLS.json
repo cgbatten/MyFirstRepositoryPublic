@@ -1,0 +1,16 @@
+{
+	"name": "OnPremiseSQLServerLS",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"connectionString": "integrated security=False;data source=localhost;initial catalog=Pollution;user id=sa",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJkZDQxNmMwNC04ZDAzLTQzNDMtOWNhMi1mZTRkMjAxZTMwNTQiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "OnPremiseIR",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

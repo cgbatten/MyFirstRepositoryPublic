@@ -1,0 +1,35 @@
+{
+	"name": "DS_ADLS_sensor_sink_raw",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADLS_FirstTutorial",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "sensor-sink-raw"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"uid": {
+					"type": "string"
+				},
+				"dat": {
+					"type": "string"
+				},
+				"loc": {
+					"type": "integer"
+				},
+				"lev": {
+					"type": "integer"
+				}
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

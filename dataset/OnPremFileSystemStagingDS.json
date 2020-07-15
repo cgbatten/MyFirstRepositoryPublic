@@ -1,0 +1,18 @@
+{
+	"name": "OnPremFileSystemStagingDS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "OnPremFileSystemLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "FileServerLocation",
+				"folderPath": "Staging"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

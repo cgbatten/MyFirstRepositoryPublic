@@ -1,0 +1,18 @@
+{
+	"name": "DS_ADLS_staging",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADLS_FirstTutorial",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "staging"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
