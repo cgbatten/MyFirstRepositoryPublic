@@ -1,0 +1,36 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "FirstTutorial-df-WorldWideImporters"
+		},
+		"AzureDataLakeStorageLS_accountKey": {
+			"value": ""
+		},
+		"AzureDatabaseLS_connectionString": {
+			"value": ""
+		},
+		"LS_ADLS_FirstTutorial_accountKey": {
+			"value": ""
+		},
+		"OnPremFileSystemLS_password": {
+			"value": ""
+		},
+		"OnPremiseSQLServerLS_connectionString": {
+			"value": ""
+		},
+		"AzureDataLakeStorageLS_properties_typeProperties_url": {
+			"value": "https://firsttutorialdatastorev2.dfs.core.windows.net"
+		},
+		"LS_ADLS_FirstTutorial_properties_typeProperties_url": {
+			"value": "https://firsttutorialdatastorev2.dfs.core.windows.net"
+		},
+		"OnPremFileSystemLS_properties_typeProperties_host": {
+			"value": "E:\\FileSystemOnPrem"
+		},
+		"OnPremFileSystemLS_properties_typeProperties_userId": {
+			"value": "dev\\chris"
+		}
+	}
+}

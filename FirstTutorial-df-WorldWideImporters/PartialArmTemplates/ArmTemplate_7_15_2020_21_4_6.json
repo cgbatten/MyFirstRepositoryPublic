@@ -1,0 +1,238 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "FirstTutorial-df-WorldWideImporters"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_TRAN_TransformSensorData')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "GetFileList",
+						"type": "GetMetadata",
+						"dependsOn": [
+							{
+								"activity": "CheckFilesExists",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "DS_ADLS_sensor_sink_raw",
+								"type": "DatasetReference"
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "AzureBlobFSReadSettings",
+								"recursive": true
+							},
+							"formatSettings": {
+								"type": "JsonReadSettings"
+							}
+						}
+					},
+					{
+						"name": "FilterFilesOnly",
+						"type": "Filter",
+						"dependsOn": [
+							{
+								"activity": "GetFileList",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('GetFileList').output.childitems",
+								"type": "Expression"
+							},
+							"condition": {
+								"value": "@equals(item().type, 'File')",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "MoveFiles",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "FilterFilesOnly",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('FilterFilesOnly').output.value",
+								"type": "Expression"
+							},
+							"batchCount": 30,
+							"activities": [
+								{
+									"name": "CopyFile",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "BinarySource",
+											"storeSettings": {
+												"type": "AzureBlobFSReadSettings",
+												"recursive": true
+											},
+											"formatSettings": {
+												"type": "BinaryReadSettings"
+											}
+										},
+										"sink": {
+											"type": "BinarySink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											}
+										},
+										"enableStaging": false
+									},
+									"inputs": [
+										{
+											"referenceName": "DS_ADSL_reusable",
+											"type": "DatasetReference",
+											"parameters": {
+												"folder": {
+													"value": "@pipeline().parameters.BlobSource",
+													"type": "Expression"
+												},
+												"file": {
+													"value": "@item().name",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "DS_ADSL_reusable",
+											"type": "DatasetReference",
+											"parameters": {
+												"folder": {
+													"value": "@pipeline().parameters.BlobDestination",
+													"type": "Expression"
+												},
+												"file": "@item().name"
+											}
+										}
+									]
+								},
+								{
+									"name": "DeleteFile",
+									"type": "Delete",
+									"dependsOn": [
+										{
+											"activity": "CopyFile",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"dataset": {
+											"referenceName": "DS_ADSL_reusable",
+											"type": "DatasetReference",
+											"parameters": {
+												"folder": {
+													"value": "@pipeline().parameters.BlobSource",
+													"type": "Expression"
+												},
+												"file": "@item().name"
+											}
+										},
+										"logStorageSettings": {
+											"linkedServiceName": {
+												"referenceName": "LS_ADLS_FirstTutorial",
+												"type": "LinkedServiceReference"
+											}
+										},
+										"enableLogging": true,
+										"storeSettings": {
+											"type": "AzureBlobFSReadSettings",
+											"recursive": true
+										}
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "CheckFilesExists",
+						"type": "Validation",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "DS_ADLS_sensor_sink_raw",
+								"type": "DatasetReference"
+							},
+							"timeout": "7.00:00:00",
+							"sleep": 10,
+							"childItems": true
+						}
+					}
+				],
+				"parameters": {
+					"BlobSource": {
+						"type": "string",
+						"defaultValue": "sensor-sink-raw"
+					},
+					"BlobDestination": {
+						"type": "string",
+						"defaultValue": "sensor-sink-stage"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		}
+	]
+}
