@@ -21,7 +21,15 @@
 						"queryTimeout": "02:00:00"
 					},
 					"sink": {
-						"type": "AzureSqlSink"
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
 					},
 					"enableStaging": false,
 					"translator": {
@@ -41,7 +49,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "DS_SQLDB_FirstTutorial_sqldb_WideWorldImporters",
+						"referenceName": "DS_ADLS_stage",
 						"type": "DatasetReference"
 					}
 				]
