@@ -28,7 +28,10 @@
 						"formatSettings": {
 							"type": "DelimitedTextWriteSettings",
 							"quoteAllText": true,
-							"fileExtension": ".txt"
+							"fileExtension": {
+								"value": "@pipeline().parameters.FileExtension",
+								"type": "Expression"
+							}
 						}
 					},
 					"enableStaging": false,
@@ -55,6 +58,12 @@
 				]
 			}
 		],
+		"parameters": {
+			"FileExtension": {
+				"type": "string",
+				"defaultValue": "csv"
+			}
+		},
 		"annotations": []
 	}
 }
