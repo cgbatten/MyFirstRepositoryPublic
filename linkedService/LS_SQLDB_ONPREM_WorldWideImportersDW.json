@@ -1,0 +1,16 @@
+{
+	"name": "LS_SQLDB_ONPREM_WorldWideImportersDW",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"connectionString": "integrated security=False;data source=localhost;initial catalog=WideWorldImportersDW;user id=sa",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiI2NjA4MWY4NS0yOTVlLTQwODMtYjZjMi0zN2Y5OTAyOWUxNzMiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "OnPremiseIR",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
