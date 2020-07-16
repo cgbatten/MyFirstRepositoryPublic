@@ -19,6 +19,14 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_ADLS_FirstTutorial'"
 		},
+		"LS_SQLDB_FirstTutorial_sqldb_WideWorldImporters_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_SQLDB_FirstTutorial_sqldb_WideWorldImporters'"
+		},
+		"LS_SQLDB_ONPREM_WorldWideImportersDW_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_SQLDB_ONPREM_WorldWideImportersDW'"
+		},
 		"OnPremFileSystemLS_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'OnPremFileSystemLS'"
@@ -512,6 +520,66 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"sqlReaderQuery": "SELECT \n\tCity\n,\t[State Province]\n,\tCountry\n,\tContinent\nFROM \n\tWideWorldImportersDW.Dimension.City\nWHERE\n\t[State Province] = 'California'",
+								"queryTimeout": "02:00:00"
+							},
+							"sink": {
+								"type": "AzureSqlSink"
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": false,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DS_SQLDB_ONPREM_WorldWideImporterDW",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DS_SQLDB_FirstTutorial_sqldb_WideWorldImporters",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_SQLDB_ONPREM_WorldWideImporterDW')]",
+				"[concat(variables('factoryId'), '/datasets/DS_SQLDB_FirstTutorial_sqldb_WideWorldImporters')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/AzureLegacySensorReadingDS')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -655,6 +723,45 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/LS_ADLS_FirstTutorial')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_SQLDB_FirstTutorial_sqldb_WideWorldImporters')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_SQLDB_FirstTutorial_sqldb_WideWorldImporters",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "Dimension",
+					"table": "City"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_SQLDB_FirstTutorial_sqldb_WideWorldImporters')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_SQLDB_ONPREM_WorldWideImporterDW')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_SQLDB_ONPREM_WorldWideImportersDW",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [],
+				"typeProperties": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_SQLDB_ONPREM_WorldWideImportersDW')]"
 			]
 		},
 		{
@@ -846,6 +953,38 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_SQLDB_FirstTutorial_sqldb_WideWorldImporters')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('LS_SQLDB_FirstTutorial_sqldb_WideWorldImporters_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_SQLDB_ONPREM_WorldWideImportersDW')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('LS_SQLDB_ONPREM_WorldWideImportersDW_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "OnPremiseIR",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/OnPremiseIR')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/OnPremFileSystemLS')]",

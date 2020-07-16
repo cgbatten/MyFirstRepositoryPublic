@@ -19,6 +19,14 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_ADLS_FirstTutorial'"
 		},
+		"LS_SQLDB_FirstTutorial_sqldb_WideWorldImporters_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_SQLDB_FirstTutorial_sqldb_WideWorldImporters'"
+		},
+		"LS_SQLDB_ONPREM_WorldWideImportersDW_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_SQLDB_ONPREM_WorldWideImportersDW'"
+		},
 		"OnPremFileSystemLS_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'OnPremFileSystemLS'"
@@ -94,6 +102,19 @@
 						"type": "SecureString",
 						"value": "[parameters('LS_ADLS_FirstTutorial_accountKey')]"
 					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_SQLDB_FirstTutorial_sqldb_WideWorldImporters')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('LS_SQLDB_FirstTutorial_sqldb_WideWorldImporters_connectionString')]"
 				}
 			},
 			"dependsOn": []
@@ -255,6 +276,27 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/DS_SQLDB_FirstTutorial_sqldb_WideWorldImporters')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_SQLDB_FirstTutorial_sqldb_WideWorldImporters",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "Dimension",
+					"table": "City"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_SQLDB_FirstTutorial_sqldb_WideWorldImporters')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/IncrementalWatermarksDS')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -283,6 +325,25 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureDatabaseLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_SQLDB_ONPREM_WorldWideImportersDW')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('LS_SQLDB_ONPREM_WorldWideImportersDW_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "OnPremiseIR",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/OnPremiseIR')]"
 			]
 		},
 		{
@@ -554,6 +615,24 @@
 				"[concat(variables('factoryId'), '/datasets/DS_ADLS_sensor_sink_raw')]",
 				"[concat(variables('factoryId'), '/datasets/DS_ADSL_reusable')]",
 				"[concat(variables('factoryId'), '/linkedServices/LS_ADLS_FirstTutorial')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_SQLDB_ONPREM_WorldWideImporterDW')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_SQLDB_ONPREM_WorldWideImportersDW",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [],
+				"typeProperties": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_SQLDB_ONPREM_WorldWideImportersDW')]"
 			]
 		},
 		{

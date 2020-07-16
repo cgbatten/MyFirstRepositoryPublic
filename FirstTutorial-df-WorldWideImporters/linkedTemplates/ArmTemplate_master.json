@@ -19,6 +19,14 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_ADLS_FirstTutorial'"
 		},
+		"LS_SQLDB_FirstTutorial_sqldb_WideWorldImporters_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_SQLDB_FirstTutorial_sqldb_WideWorldImporters'"
+		},
+		"LS_SQLDB_ONPREM_WorldWideImportersDW_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_SQLDB_ONPREM_WorldWideImportersDW'"
+		},
 		"OnPremFileSystemLS_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'OnPremFileSystemLS'"
@@ -79,6 +87,12 @@
 					"LS_ADLS_FirstTutorial_accountKey": {
 						"value": "[parameters('LS_ADLS_FirstTutorial_accountKey')]"
 					},
+					"LS_SQLDB_FirstTutorial_sqldb_WideWorldImporters_connectionString": {
+						"value": "[parameters('LS_SQLDB_FirstTutorial_sqldb_WideWorldImporters_connectionString')]"
+					},
+					"LS_SQLDB_ONPREM_WorldWideImportersDW_connectionString": {
+						"value": "[parameters('LS_SQLDB_ONPREM_WorldWideImportersDW_connectionString')]"
+					},
 					"OnPremFileSystemLS_password": {
 						"value": "[parameters('OnPremFileSystemLS_password')]"
 					},
@@ -100,6 +114,26 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'ArmTemplate_0')]"
+			]
 		}
 	]
 }
