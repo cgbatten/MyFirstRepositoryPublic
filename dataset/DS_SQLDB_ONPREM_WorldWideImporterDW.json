@@ -1,0 +1,12 @@
+{
+	"name": "DS_SQLDB_ONPREM_WorldWideImporterDW",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SQLDB_ONPREM_WorldWideImportersDW",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": []
+	}
+}
