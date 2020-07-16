@@ -1,0 +1,16 @@
+{
+	"name": "DS_SQLDB_FirstTutorial_sqldb_WideWorldImporters",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SQLDB_FirstTutorial_sqldb_WideWorldImporters",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "Dimension",
+			"table": "City"
+		}
+	}
+}
