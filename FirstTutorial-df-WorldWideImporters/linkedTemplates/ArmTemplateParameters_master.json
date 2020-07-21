@@ -14,6 +14,9 @@
 		"LS_ADLS_FirstTutorial_accountKey": {
 			"value": ""
 		},
+		"LS_OnPrem_sqldb_dev_pollution_connectionString": {
+			"value": ""
+		},
 		"LS_SQLDB_FirstTutorial_sqldb_WideWorldImporters_connectionString": {
 			"value": ""
 		},

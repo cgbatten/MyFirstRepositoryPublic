@@ -19,6 +19,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_ADLS_FirstTutorial'"
 		},
+		"LS_OnPrem_sqldb_dev_pollution_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_OnPrem_sqldb_dev_pollution'"
+		},
 		"LS_SQLDB_FirstTutorial_sqldb_WideWorldImporters_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_SQLDB_FirstTutorial_sqldb_WideWorldImporters'"
@@ -252,7 +256,14 @@
 					{
 						"name": "CheckFilesExists",
 						"type": "Validation",
-						"dependsOn": [],
+						"dependsOn": [
+							{
+								"activity": "Wait1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
 						"userProperties": [],
 						"typeProperties": {
 							"dataset": {
@@ -263,6 +274,15 @@
 							"timeout": "7.00:00:00",
 							"sleep": 10,
 							"childItems": true
+						}
+					},
+					{
+						"name": "Wait1",
+						"type": "Wait",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"waitTimeInSeconds": 1
 						}
 					}
 				],
@@ -540,7 +560,6 @@
 						"typeProperties": {
 							"source": {
 								"type": "SqlServerSource",
-								"sqlReaderQuery": "SELECT \n\tCity\n,\t[State Province]\n,\tCountry\n,\tContinent\nFROM \n\tWideWorldImportersDW.Dimension.City\nWHERE\n\t[State Province] = 'California'",
 								"queryTimeout": "02:00:00"
 							},
 							"sink": {
@@ -551,10 +570,7 @@
 								"formatSettings": {
 									"type": "DelimitedTextWriteSettings",
 									"quoteAllText": true,
-									"fileExtension": {
-										"value": "@pipeline().parameters.FileExtension",
-										"type": "Expression"
-									}
+									"fileExtension": ".csv"
 								}
 							},
 							"enableStaging": false,
@@ -562,14 +578,14 @@
 								"type": "TabularTranslator",
 								"typeConversion": true,
 								"typeConversionSettings": {
-									"allowDataTruncation": false,
+									"allowDataTruncation": true,
 									"treatBooleanAsNumber": false
 								}
 							}
 						},
 						"inputs": [
 							{
-								"referenceName": "DS_SQLDB_ONPREM_WorldWideImporterDW",
+								"referenceName": "DS_OnPrem_Source",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -586,13 +602,13 @@
 				"parameters": {
 					"FileExtension": {
 						"type": "string",
-						"defaultValue": "csv"
+						"defaultValue": ".csv"
 					}
 				},
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DS_SQLDB_ONPREM_WorldWideImporterDW')]",
+				"[concat(variables('factoryId'), '/datasets/DS_OnPrem_Source')]",
 				"[concat(variables('factoryId'), '/datasets/DS_ADLS_stage')]"
 			]
 		},
@@ -766,6 +782,53 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/LS_ADLS_FirstTutorial')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_OnPrem_Source')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_OnPrem_sqldb_dev_pollution",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "Id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ReadingId",
+						"type": "varchar"
+					},
+					{
+						"name": "ReadingDateTime",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "LocationId",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "PollutionLevel",
+						"type": "tinyint",
+						"precision": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "LegacySensorReadings"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_OnPrem_sqldb_dev_pollution')]"
 			]
 		},
 		{
@@ -996,6 +1059,25 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_OnPrem_sqldb_dev_pollution')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('LS_OnPrem_sqldb_dev_pollution_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "OnPremiseIR",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/OnPremiseIR')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/LS_SQLDB_FirstTutorial_sqldb_WideWorldImporters')]",

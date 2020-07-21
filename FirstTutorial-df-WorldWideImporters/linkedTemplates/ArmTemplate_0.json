@@ -23,6 +23,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_SQLDB_FirstTutorial_sqldb_WideWorldImporters'"
 		},
+		"LS_OnPrem_sqldb_dev_pollution_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_OnPrem_sqldb_dev_pollution'"
+		},
 		"LS_SQLDB_ONPREM_WorldWideImportersDW_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_SQLDB_ONPREM_WorldWideImportersDW'"
@@ -354,6 +358,25 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/LS_OnPrem_sqldb_dev_pollution')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('LS_OnPrem_sqldb_dev_pollution_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "OnPremiseIR",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/OnPremiseIR')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/LS_SQLDB_ONPREM_WorldWideImportersDW')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -611,7 +634,14 @@
 					{
 						"name": "CheckFilesExists",
 						"type": "Validation",
-						"dependsOn": [],
+						"dependsOn": [
+							{
+								"activity": "Wait1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
 						"userProperties": [],
 						"typeProperties": {
 							"dataset": {
@@ -622,6 +652,15 @@
 							"timeout": "7.00:00:00",
 							"sleep": 10,
 							"childItems": true
+						}
+					},
+					{
+						"name": "Wait1",
+						"type": "Wait",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"waitTimeInSeconds": 1
 						}
 					}
 				],
@@ -641,6 +680,53 @@
 				"[concat(variables('factoryId'), '/datasets/DS_ADLS_sensor_sink_raw')]",
 				"[concat(variables('factoryId'), '/datasets/DS_ADSL_reusable')]",
 				"[concat(variables('factoryId'), '/linkedServices/LS_ADLS_FirstTutorial')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_OnPrem_Source')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_OnPrem_sqldb_dev_pollution",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "Id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ReadingId",
+						"type": "varchar"
+					},
+					{
+						"name": "ReadingDateTime",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "LocationId",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "PollutionLevel",
+						"type": "tinyint",
+						"precision": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "LegacySensorReadings"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_OnPrem_sqldb_dev_pollution')]"
 			]
 		},
 		{
@@ -698,76 +784,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/OnPremFileSystemLS')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/OnPremFileSystemStagingDS')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "OnPremFileSystemLS",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Json",
-				"typeProperties": {
-					"location": {
-						"type": "FileServerLocation",
-						"folderPath": "Staging"
-					}
-				},
-				"schema": {}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/OnPremFileSystemLS')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/OnPremiseLegacySensorReadingDS')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "OnPremiseSQLServerLS",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "SqlServerTable",
-				"schema": [
-					{
-						"name": "Id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "ReadingId",
-						"type": "varchar"
-					},
-					{
-						"name": "ReadingDateTime",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "LocationId",
-						"type": "smallint",
-						"precision": 5
-					},
-					{
-						"name": "PollutionLevel",
-						"type": "tinyint",
-						"precision": 3
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "LegacySensorReadings"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/OnPremiseSQLServerLS')]"
 			]
 		}
 	]

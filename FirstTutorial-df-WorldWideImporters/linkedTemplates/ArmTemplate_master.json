@@ -19,6 +19,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_ADLS_FirstTutorial'"
 		},
+		"LS_OnPrem_sqldb_dev_pollution_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_OnPrem_sqldb_dev_pollution'"
+		},
 		"LS_SQLDB_FirstTutorial_sqldb_WideWorldImporters_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_SQLDB_FirstTutorial_sqldb_WideWorldImporters'"
@@ -89,6 +93,9 @@
 					},
 					"LS_SQLDB_FirstTutorial_sqldb_WideWorldImporters_connectionString": {
 						"value": "[parameters('LS_SQLDB_FirstTutorial_sqldb_WideWorldImporters_connectionString')]"
+					},
+					"LS_OnPrem_sqldb_dev_pollution_connectionString": {
+						"value": "[parameters('LS_OnPrem_sqldb_dev_pollution_connectionString')]"
 					},
 					"LS_SQLDB_ONPREM_WorldWideImportersDW_connectionString": {
 						"value": "[parameters('LS_SQLDB_ONPREM_WorldWideImportersDW_connectionString')]"

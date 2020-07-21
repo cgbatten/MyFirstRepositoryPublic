@@ -13,6 +13,72 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/OnPremFileSystemStagingDS')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "OnPremFileSystemLS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "FileServerLocation",
+						"folderPath": "Staging"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/OnPremiseLegacySensorReadingDS')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "OnPremiseSQLServerLS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "Id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ReadingId",
+						"type": "varchar"
+					},
+					{
+						"name": "ReadingDateTime",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "LocationId",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "PollutionLevel",
+						"type": "tinyint",
+						"precision": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "LegacySensorReadings"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/SQLOnPremIncremental')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -240,7 +306,9 @@
 				],
 				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/OnPremiseLegacySensorReadingDS')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
@@ -263,7 +331,6 @@
 						"typeProperties": {
 							"source": {
 								"type": "SqlServerSource",
-								"sqlReaderQuery": "SELECT \n\tCity\n,\t[State Province]\n,\tCountry\n,\tContinent\nFROM \n\tWideWorldImportersDW.Dimension.City\nWHERE\n\t[State Province] = 'California'",
 								"queryTimeout": "02:00:00"
 							},
 							"sink": {
@@ -274,10 +341,7 @@
 								"formatSettings": {
 									"type": "DelimitedTextWriteSettings",
 									"quoteAllText": true,
-									"fileExtension": {
-										"value": "@pipeline().parameters.FileExtension",
-										"type": "Expression"
-									}
+									"fileExtension": ".csv"
 								}
 							},
 							"enableStaging": false,
@@ -285,14 +349,14 @@
 								"type": "TabularTranslator",
 								"typeConversion": true,
 								"typeConversionSettings": {
-									"allowDataTruncation": false,
+									"allowDataTruncation": true,
 									"treatBooleanAsNumber": false
 								}
 							}
 						},
 						"inputs": [
 							{
-								"referenceName": "DS_SQLDB_ONPREM_WorldWideImporterDW",
+								"referenceName": "DS_OnPrem_Source",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -309,7 +373,7 @@
 				"parameters": {
 					"FileExtension": {
 						"type": "string",
-						"defaultValue": "csv"
+						"defaultValue": ".csv"
 					}
 				},
 				"annotations": []
