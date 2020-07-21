@@ -17,7 +17,6 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
-						"sqlReaderQuery": "SELECT \n\tCity\n,\t[State Province]\n,\tCountry\n,\tContinent\nFROM \n\tWideWorldImportersDW.Dimension.City\nWHERE\n\t[State Province] = 'California'",
 						"queryTimeout": "02:00:00"
 					},
 					"sink": {
@@ -28,10 +27,7 @@
 						"formatSettings": {
 							"type": "DelimitedTextWriteSettings",
 							"quoteAllText": true,
-							"fileExtension": {
-								"value": "@pipeline().parameters.FileExtension",
-								"type": "Expression"
-							}
+							"fileExtension": ".csv"
 						}
 					},
 					"enableStaging": false,
@@ -39,14 +35,14 @@
 						"type": "TabularTranslator",
 						"typeConversion": true,
 						"typeConversionSettings": {
-							"allowDataTruncation": false,
+							"allowDataTruncation": true,
 							"treatBooleanAsNumber": false
 						}
 					}
 				},
 				"inputs": [
 					{
-						"referenceName": "DS_SQLDB_ONPREM_WorldWideImporterDW",
+						"referenceName": "DS_OnPrem_Source",
 						"type": "DatasetReference"
 					}
 				],
