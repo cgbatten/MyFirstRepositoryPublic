@@ -1,0 +1,23 @@
+{
+	"name": "DestinationDataset_qd5",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADLS_FirstTutorial",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "LegacySensorReadings",
+				"fileSystem": "stage"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
