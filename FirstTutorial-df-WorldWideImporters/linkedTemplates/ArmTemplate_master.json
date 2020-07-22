@@ -19,6 +19,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_ADLS_FirstTutorial'"
 		},
+		"LS_OnPrem_FS_Temp_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'LS_OnPrem_FS_Temp'"
+		},
 		"LS_OnPrem_sqldb_dev_pollution_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_OnPrem_sqldb_dev_pollution'"
@@ -39,10 +43,6 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'OnPremiseSQLServerLS'"
 		},
-		"LS_OnPrem_FS_Temp_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'LS_OnPrem_FS_Temp'"
-		},
 		"AzureDataLakeStorageLS_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://firsttutorialdatastorev2.dfs.core.windows.net"
@@ -51,14 +51,6 @@
 			"type": "string",
 			"defaultValue": "https://firsttutorialdatastorev2.dfs.core.windows.net"
 		},
-		"OnPremFileSystemLS_properties_typeProperties_host": {
-			"type": "string",
-			"defaultValue": "E:\\FileSystemOnPrem"
-		},
-		"OnPremFileSystemLS_properties_typeProperties_userId": {
-			"type": "string",
-			"defaultValue": "dev\\chris"
-		},
 		"LS_OnPrem_FS_Temp_properties_typeProperties_host": {
 			"type": "string",
 			"defaultValue": "E:\\Temp"
@@ -66,6 +58,14 @@
 		"LS_OnPrem_FS_Temp_properties_typeProperties_userId": {
 			"type": "string",
 			"defaultValue": "AzureUser"
+		},
+		"OnPremFileSystemLS_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "E:\\FileSystemOnPrem"
+		},
+		"OnPremFileSystemLS_properties_typeProperties_userId": {
+			"type": "string",
+			"defaultValue": "dev\\chris"
 		},
 		"containerUri": {
 			"type": "string",
@@ -106,6 +106,9 @@
 					"LS_SQLDB_FirstTutorial_sqldb_WideWorldImporters_connectionString": {
 						"value": "[parameters('LS_SQLDB_FirstTutorial_sqldb_WideWorldImporters_connectionString')]"
 					},
+					"LS_OnPrem_FS_Temp_password": {
+						"value": "[parameters('LS_OnPrem_FS_Temp_password')]"
+					},
 					"LS_OnPrem_sqldb_dev_pollution_connectionString": {
 						"value": "[parameters('LS_OnPrem_sqldb_dev_pollution_connectionString')]"
 					},
@@ -118,26 +121,23 @@
 					"OnPremiseSQLServerLS_connectionString": {
 						"value": "[parameters('OnPremiseSQLServerLS_connectionString')]"
 					},
-					"LS_OnPrem_FS_Temp_password": {
-						"value": "[parameters('LS_OnPrem_FS_Temp_password')]"
-					},
 					"AzureDataLakeStorageLS_properties_typeProperties_url": {
 						"value": "[parameters('AzureDataLakeStorageLS_properties_typeProperties_url')]"
 					},
 					"LS_ADLS_FirstTutorial_properties_typeProperties_url": {
 						"value": "[parameters('LS_ADLS_FirstTutorial_properties_typeProperties_url')]"
 					},
-					"OnPremFileSystemLS_properties_typeProperties_host": {
-						"value": "[parameters('OnPremFileSystemLS_properties_typeProperties_host')]"
-					},
-					"OnPremFileSystemLS_properties_typeProperties_userId": {
-						"value": "[parameters('OnPremFileSystemLS_properties_typeProperties_userId')]"
-					},
 					"LS_OnPrem_FS_Temp_properties_typeProperties_host": {
 						"value": "[parameters('LS_OnPrem_FS_Temp_properties_typeProperties_host')]"
 					},
 					"LS_OnPrem_FS_Temp_properties_typeProperties_userId": {
 						"value": "[parameters('LS_OnPrem_FS_Temp_properties_typeProperties_userId')]"
+					},
+					"OnPremFileSystemLS_properties_typeProperties_host": {
+						"value": "[parameters('OnPremFileSystemLS_properties_typeProperties_host')]"
+					},
+					"OnPremFileSystemLS_properties_typeProperties_userId": {
+						"value": "[parameters('OnPremFileSystemLS_properties_typeProperties_userId')]"
 					}
 				}
 			},

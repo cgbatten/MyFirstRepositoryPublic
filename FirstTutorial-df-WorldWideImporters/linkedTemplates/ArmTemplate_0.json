@@ -23,6 +23,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_SQLDB_FirstTutorial_sqldb_WideWorldImporters'"
 		},
+		"LS_OnPrem_FS_Temp_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'LS_OnPrem_FS_Temp'"
+		},
 		"LS_OnPrem_sqldb_dev_pollution_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_OnPrem_sqldb_dev_pollution'"
@@ -39,10 +43,6 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'OnPremiseSQLServerLS'"
 		},
-		"LS_OnPrem_FS_Temp_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'LS_OnPrem_FS_Temp'"
-		},
 		"AzureDataLakeStorageLS_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://firsttutorialdatastorev2.dfs.core.windows.net"
@@ -51,14 +51,6 @@
 			"type": "string",
 			"defaultValue": "https://firsttutorialdatastorev2.dfs.core.windows.net"
 		},
-		"OnPremFileSystemLS_properties_typeProperties_host": {
-			"type": "string",
-			"defaultValue": "E:\\FileSystemOnPrem"
-		},
-		"OnPremFileSystemLS_properties_typeProperties_userId": {
-			"type": "string",
-			"defaultValue": "dev\\chris"
-		},
 		"LS_OnPrem_FS_Temp_properties_typeProperties_host": {
 			"type": "string",
 			"defaultValue": "E:\\Temp"
@@ -66,6 +58,14 @@
 		"LS_OnPrem_FS_Temp_properties_typeProperties_userId": {
 			"type": "string",
 			"defaultValue": "AzureUser"
+		},
+		"OnPremFileSystemLS_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "E:\\FileSystemOnPrem"
+		},
+		"OnPremFileSystemLS_properties_typeProperties_userId": {
+			"type": "string",
+			"defaultValue": "dev\\chris"
 		}
 	},
 	"variables": {
@@ -399,6 +399,30 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/LS_OnPrem_FS_Temp')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "FileServer",
+				"typeProperties": {
+					"host": "[parameters('LS_OnPrem_FS_Temp_properties_typeProperties_host')]",
+					"userId": "[parameters('LS_OnPrem_FS_Temp_properties_typeProperties_userId')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('LS_OnPrem_FS_Temp_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "OnPremiseIR",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/OnPremiseIR')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/LS_OnPrem_sqldb_dev_pollution')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -469,30 +493,6 @@
 				"type": "SqlServer",
 				"typeProperties": {
 					"connectionString": "[parameters('OnPremiseSQLServerLS_connectionString')]"
-				},
-				"connectVia": {
-					"referenceName": "OnPremiseIR",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/OnPremiseIR')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LS_OnPrem_FS_Temp')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "FileServer",
-				"typeProperties": {
-					"host": "[parameters('LS_OnPrem_FS_Temp_properties_typeProperties_host')]",
-					"userId": "[parameters('LS_OnPrem_FS_Temp_properties_typeProperties_userId')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('LS_OnPrem_FS_Temp_password')]"
-					}
 				},
 				"connectVia": {
 					"referenceName": "OnPremiseIR",
@@ -748,50 +748,29 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DS_OnPrem_Source')]",
+			"name": "[concat(parameters('factoryName'), '/DS_OnPrem_FS_Temp')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "LS_OnPrem_sqldb_dev_pollution",
+					"referenceName": "LS_OnPrem_FS_Temp",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
-				"type": "SqlServerTable",
-				"schema": [
-					{
-						"name": "Id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "ReadingId",
-						"type": "varchar"
-					},
-					{
-						"name": "ReadingDateTime",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "LocationId",
-						"type": "smallint",
-						"precision": 5
-					},
-					{
-						"name": "PollutionLevel",
-						"type": "tinyint",
-						"precision": 3
-					}
-				],
+				"type": "DelimitedText",
 				"typeProperties": {
-					"schema": "dbo",
-					"table": "LegacySensorReadings"
-				}
+					"location": {
+						"type": "FileServerLocation"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_OnPrem_sqldb_dev_pollution')]"
+				"[concat(variables('factoryId'), '/linkedServices/LS_OnPrem_FS_Temp')]"
 			]
 		}
 	]

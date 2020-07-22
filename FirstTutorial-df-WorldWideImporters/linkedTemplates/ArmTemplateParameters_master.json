@@ -14,6 +14,9 @@
 		"LS_ADLS_FirstTutorial_accountKey": {
 			"value": ""
 		},
+		"LS_OnPrem_FS_Temp_password": {
+			"value": ""
+		},
 		"LS_OnPrem_sqldb_dev_pollution_connectionString": {
 			"value": ""
 		},
@@ -29,26 +32,23 @@
 		"OnPremiseSQLServerLS_connectionString": {
 			"value": ""
 		},
-		"LS_OnPrem_FS_Temp_password": {
-			"value": ""
-		},
 		"AzureDataLakeStorageLS_properties_typeProperties_url": {
 			"value": "https://firsttutorialdatastorev2.dfs.core.windows.net"
 		},
 		"LS_ADLS_FirstTutorial_properties_typeProperties_url": {
 			"value": "https://firsttutorialdatastorev2.dfs.core.windows.net"
 		},
-		"OnPremFileSystemLS_properties_typeProperties_host": {
-			"value": "E:\\FileSystemOnPrem"
-		},
-		"OnPremFileSystemLS_properties_typeProperties_userId": {
-			"value": "dev\\chris"
-		},
 		"LS_OnPrem_FS_Temp_properties_typeProperties_host": {
 			"value": "E:\\Temp"
 		},
 		"LS_OnPrem_FS_Temp_properties_typeProperties_userId": {
 			"value": "AzureUser"
+		},
+		"OnPremFileSystemLS_properties_typeProperties_host": {
+			"value": "E:\\FileSystemOnPrem"
+		},
+		"OnPremFileSystemLS_properties_typeProperties_userId": {
+			"value": "dev\\chris"
 		},
 		"containerUri": {
 			"value": ""
