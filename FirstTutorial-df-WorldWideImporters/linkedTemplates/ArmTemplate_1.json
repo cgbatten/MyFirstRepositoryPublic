@@ -23,33 +23,7 @@
 				},
 				"annotations": [],
 				"type": "SqlServerTable",
-				"schema": [
-					{
-						"name": "Id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "ReadingId",
-						"type": "varchar"
-					},
-					{
-						"name": "ReadingDateTime",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "LocationId",
-						"type": "smallint",
-						"precision": 5
-					},
-					{
-						"name": "PollutionLevel",
-						"type": "tinyint",
-						"precision": 3
-					}
-				],
+				"schema": [],
 				"typeProperties": {
 					"schema": "dbo",
 					"table": "LegacySensorReadings"
