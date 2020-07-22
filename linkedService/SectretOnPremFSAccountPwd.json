@@ -1,0 +1,10 @@
+{
+	"name": "SectretOnPremFSAccountPwd",
+	"properties": {
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://KeyVaultFirstTutorial.vault.azure.net/"
+		}
+	}
+}
