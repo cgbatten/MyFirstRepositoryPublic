@@ -29,6 +29,9 @@
 		"OnPremiseSQLServerLS_connectionString": {
 			"value": ""
 		},
+		"LS_OnPrem_FS_Temp_password": {
+			"value": ""
+		},
 		"AzureDataLakeStorageLS_properties_typeProperties_url": {
 			"value": "https://firsttutorialdatastorev2.dfs.core.windows.net"
 		},
@@ -40,6 +43,12 @@
 		},
 		"OnPremFileSystemLS_properties_typeProperties_userId": {
 			"value": "dev\\chris"
+		},
+		"LS_OnPrem_FS_Temp_properties_typeProperties_host": {
+			"value": "E:\\Temp"
+		},
+		"LS_OnPrem_FS_Temp_properties_typeProperties_userId": {
+			"value": "AzureUser"
 		}
 	}
 }

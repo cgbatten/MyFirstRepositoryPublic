@@ -39,6 +39,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'OnPremiseSQLServerLS'"
 		},
+		"LS_OnPrem_FS_Temp_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'LS_OnPrem_FS_Temp'"
+		},
 		"AzureDataLakeStorageLS_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://firsttutorialdatastorev2.dfs.core.windows.net"
@@ -54,6 +58,14 @@
 		"OnPremFileSystemLS_properties_typeProperties_userId": {
 			"type": "string",
 			"defaultValue": "dev\\chris"
+		},
+		"LS_OnPrem_FS_Temp_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "E:\\Temp"
+		},
+		"LS_OnPrem_FS_Temp_properties_typeProperties_userId": {
+			"type": "string",
+			"defaultValue": "AzureUser"
 		},
 		"containerUri": {
 			"type": "string",
@@ -106,6 +118,9 @@
 					"OnPremiseSQLServerLS_connectionString": {
 						"value": "[parameters('OnPremiseSQLServerLS_connectionString')]"
 					},
+					"LS_OnPrem_FS_Temp_password": {
+						"value": "[parameters('LS_OnPrem_FS_Temp_password')]"
+					},
 					"AzureDataLakeStorageLS_properties_typeProperties_url": {
 						"value": "[parameters('AzureDataLakeStorageLS_properties_typeProperties_url')]"
 					},
@@ -117,6 +132,12 @@
 					},
 					"OnPremFileSystemLS_properties_typeProperties_userId": {
 						"value": "[parameters('OnPremFileSystemLS_properties_typeProperties_userId')]"
+					},
+					"LS_OnPrem_FS_Temp_properties_typeProperties_host": {
+						"value": "[parameters('LS_OnPrem_FS_Temp_properties_typeProperties_host')]"
+					},
+					"LS_OnPrem_FS_Temp_properties_typeProperties_userId": {
+						"value": "[parameters('LS_OnPrem_FS_Temp_properties_typeProperties_userId')]"
 					}
 				}
 			},

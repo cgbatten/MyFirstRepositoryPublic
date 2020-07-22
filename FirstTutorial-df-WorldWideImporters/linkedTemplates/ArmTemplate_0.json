@@ -39,6 +39,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'OnPremiseSQLServerLS'"
 		},
+		"LS_OnPrem_FS_Temp_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'LS_OnPrem_FS_Temp'"
+		},
 		"AzureDataLakeStorageLS_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://firsttutorialdatastorev2.dfs.core.windows.net"
@@ -54,6 +58,14 @@
 		"OnPremFileSystemLS_properties_typeProperties_userId": {
 			"type": "string",
 			"defaultValue": "dev\\chris"
+		},
+		"LS_OnPrem_FS_Temp_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "E:\\Temp"
+		},
+		"LS_OnPrem_FS_Temp_properties_typeProperties_userId": {
+			"type": "string",
+			"defaultValue": "AzureUser"
 		}
 	},
 	"variables": {
@@ -468,6 +480,30 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/LS_OnPrem_FS_Temp')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "FileServer",
+				"typeProperties": {
+					"host": "[parameters('LS_OnPrem_FS_Temp_properties_typeProperties_host')]",
+					"userId": "[parameters('LS_OnPrem_FS_Temp_properties_typeProperties_userId')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('LS_OnPrem_FS_Temp_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "OnPremiseIR",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/OnPremiseIR')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/PL_TRAN_TransformSensorData')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -756,24 +792,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/LS_OnPrem_sqldb_dev_pollution')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DS_SQLDB_ONPREM_WorldWideImporterDW')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_SQLDB_ONPREM_WorldWideImportersDW",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "SqlServerTable",
-				"schema": [],
-				"typeProperties": {}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_SQLDB_ONPREM_WorldWideImportersDW')]"
 			]
 		}
 	]
