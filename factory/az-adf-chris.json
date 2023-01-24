@@ -1,0 +1,9 @@
+{
+	"name": "az-adf-chris",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "c01fcd60-4f3e-4edd-a3a0-bdb94698d1c0",
+		"tenantId": "3617ef9b-98b4-40d9-ba43-e1ed6709cf0d"
+	}
+}
