@@ -582,6 +582,53 @@
 								"parameters": {}
 							}
 						}
+					},
+					{
+						"name": "IfCondition_DateCheck",
+						"type": "IfCondition",
+						"dependsOn": [
+							{
+								"activity": "Get_Last_Execution_Data",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "Get_MetaData_LastModified_AndMore",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@greaterOrEquals(\nactivity('Get_MetaData_LastModified_AndMore').output.lastModified,\nactivity('Get_Last_Execution_Data').output.firstRow.executiondate\n)",
+								"type": "Expression"
+							},
+							"ifFalseActivities": [
+								{
+									"name": "Wait_False",
+									"type": "Wait",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"waitTimeInSeconds": 1
+									}
+								}
+							],
+							"ifTrueActivities": [
+								{
+									"name": "Wait_True",
+									"type": "Wait",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"waitTimeInSeconds": 1
+									}
+								}
+							]
+						}
 					}
 				],
 				"policy": {
