@@ -11,6 +11,9 @@
 		"AzureSqlDatabase1_connectionString": {
 			"value": ""
 		},
+		"BlobStorage_azurestorage_Auto_connectionString": {
+			"value": ""
+		},
 		"containerUri": {
 			"value": ""
 		},
