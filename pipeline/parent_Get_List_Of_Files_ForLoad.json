@@ -35,7 +35,14 @@
 			{
 				"name": "execute_child_ForEach",
 				"type": "ExecutePipeline",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "filter_fact_internetsales_meta",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
@@ -45,9 +52,32 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"FileList": {
-							"value": "@activity('Meta_Get_List_Of_Files').output.childItems",
+							"value": "@activity('filter_fact_internetsales_meta').output.value",
 							"type": "Expression"
 						}
+					}
+				}
+			},
+			{
+				"name": "filter_fact_internetsales_meta",
+				"type": "Filter",
+				"dependsOn": [
+					{
+						"activity": "Meta_Get_List_Of_Files",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Meta_Get_List_Of_Files').output.childItems",
+						"type": "Expression"
+					},
+					"condition": {
+						"value": "@startswith(item().name,'FactInternetSales_')",
+						"type": "Expression"
 					}
 				}
 			}
