@@ -24,6 +24,7 @@
 					],
 					"storeSettings": {
 						"type": "AzureBlobStorageReadSettings",
+						"recursive": true,
 						"enablePartitionDiscovery": false
 					},
 					"formatSettings": {
@@ -34,14 +35,7 @@
 			{
 				"name": "execute_child_ForEach",
 				"type": "ExecutePipeline",
-				"dependsOn": [
-					{
-						"activity": "Meta_Get_List_Of_Files",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
