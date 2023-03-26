@@ -30,7 +30,7 @@
 								"storedProcedureParameters": {
 									"DateInserted": {
 										"value": {
-											"value": "@utcutcnow()",
+											"value": "@utcnow()",
 											"type": "Expression"
 										},
 										"type": "DateTime"
