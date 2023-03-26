@@ -1,0 +1,11 @@
+{
+	"name": "child_ForEach",
+	"properties": {
+		"parameters": {
+			"FileList": {
+				"type": "object"
+			}
+		},
+		"annotations": []
+	}
+}
