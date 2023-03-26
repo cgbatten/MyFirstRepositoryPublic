@@ -1,0 +1,24 @@
+{
+	"name": "azurestorage_blob_internetsales",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "BlobStorage_azurestorage_Auto",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "@{item().name}",
+				"folderPath": "InternetSales",
+				"container": "container-chris"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
