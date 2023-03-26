@@ -1,6 +1,62 @@
 {
 	"name": "child_ForEach",
 	"properties": {
+		"activities": [
+			{
+				"name": "loop_FileList",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.FileList",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "usp_InsertRecords",
+							"type": "SqlServerStoredProcedure",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"storedProcedureName": "usp_InsertFileNames",
+								"storedProcedureParameters": {
+									"DateInserted": {
+										"value": {
+											"value": "@utcutcnow()",
+											"type": "Expression"
+										},
+										"type": "DateTime"
+									},
+									"filename": {
+										"value": {
+											"value": "@{item().name}",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"Status": {
+										"value": "1",
+										"type": "Int32"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "AzureSqlDatabase1",
+								"type": "LinkedServiceReference"
+							}
+						}
+					]
+				}
+			}
+		],
 		"parameters": {
 			"FileList": {
 				"type": "object"

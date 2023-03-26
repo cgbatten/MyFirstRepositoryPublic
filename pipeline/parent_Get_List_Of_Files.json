@@ -44,7 +44,17 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"waitOnCompletion": true
+					"pipeline": {
+						"referenceName": "child_ForEach",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"FileList": {
+							"value": "@activity('Meta_Get_List_Of_Files').output.childItems",
+							"type": "Expression"
+						}
+					}
 				}
 			}
 		],
